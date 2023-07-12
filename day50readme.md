@@ -105,3 +105,10 @@ driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () =>
 driver.get("https://www.website.com")
 
 ```
+
+## ANALYZE THE BROWSER FINGERPRINT
+* [Cover Your Tracks](https://wwww.coveryourtracks.eff)
+
+* [Common Bot Detection Techniques](https://github.com/0xInfection/Awesome-WAF)
+
+* [A Great Stack Overflow Question About Selenium Detection](https://stackoverflow.com/questions/33225947/can-a-website-detect-when-you-are-using-selenium-with-chromedriver)
