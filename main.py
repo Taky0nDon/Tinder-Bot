@@ -2,6 +2,7 @@ import time
 import os
 import json
 
+import selenium.common.exceptions
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -40,13 +41,16 @@ driver.get("https://tinder.com/404")
 time.sleep(1)
 ### ADDING COOKIES
 with open("cookies.json") as file:
-    lines = file.readlines()
-    cookie_list = []
-    for line in lines:
-        print(line)
-        cookie_list.append(json.loads(line))
-    for cookie in cookie_list:
-        driver.add_cookie(cookie)
+# Check if the file is empty. Only continue if it's not.
+    if len(file.read()) > 0:
+        lines = file.readlines()
+        cookie_list = []
+        for line in lines:
+            print(line)
+            cookie_list.append(json.loads(line))
+        for cookie in cookie_list:
+            driver.add_cookie(cookie)
+
 
 
 print("here")
@@ -69,7 +73,13 @@ for window_handle in driver.window_handles:
     if window_handle != original_window:
         driver.switch_to.window(window_handle)
 print(driver.current_window_handle)
-
+# with open("googlecookies.txt") as file:
+#     cookies = file.readlines()
+#     for cookie in cookies:
+#         stripped_cookie = cookie.strip()
+#         cookie_dict = json.loads(stripped_cookie)
+#         driver.add_cookie(cookie_dict)
+# selenium.common.exceptions.UnableToSetCookieException: Message: unable to set cookie
 
 driver.find_element(By.TAG_NAME, "input").send_keys(EMAIL)
 driver.find_element(By.XPATH, next_xpath).click()
@@ -77,13 +87,25 @@ time.sleep(5)
 # wait.until(EC.presence_of_element_located(locator=(By.ID, "password")))
 password_input = driver.find_element(By.XPATH, '//*[@id="password"]/div[1]/div/div[1]/input')
 password_input.send_keys(PASS, Keys.ENTER)
+
+
+current_page = driver.find_element(By.TAG_NAME, "html")
+# with open("2fapage.html", "w") as file:
+#     page_source = driver.page_source
+#     for char in page_source:
+#         if char in "\u200b":
+#             file.write("ZWSP")
+#         elif char == "\u202a":
+#             file.write("LTRE")
+#         else:
+#             file.write(char) f
+print(driver.current_window_handle)
 time.sleep(2)
 keep_going = input("Hit ENTER to continue.")
+
+
 driver.switch_to.window(original_window)
-with open("tindercookies.txt", "w") as file:
-    cookies = driver.get_cookies()
-    for cookie in cookies:
-        json.dump(cookie, file)
+
 # Allow location
 driver.find_element(By.CSS_SELECTOR, 'button[aria-label="Allow"]').click()
 #Don't allow notifications
@@ -94,6 +116,7 @@ just_before_like_cookies = driver.get_cookies()
 for cookie in just_before_like_cookies:
     with open("cookies.json", "a") as file:
         json.dump(cookie, file)
+        file.write("\n")
 for n in range(10):
     # child = driver.find_element(By.XPATH, '//*[text()="Like"]')
     # parent = child.find_element(By.XPATH, "./..")
@@ -101,4 +124,13 @@ for n in range(10):
     child.click()
     print("Liked!")
     time.sleep(1)
+    another_one = input("Shall I continue?")
+#TODO Click "BACK TO TINDER" to dismiss match?
+    not_interested = driver.find_elements(By.XPATH, '//*[text()="Not interested"]')
+    match_found = driver.find_elements(By.XPATH, '//*[text()="match"]')
+    if len(not_interested) > 0:
+        not_interested[0].click()
+    if len(match_found) > 0:
+        match_found[0].click()
+
 # Need to account for matches!
