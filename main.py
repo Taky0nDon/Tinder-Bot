@@ -117,20 +117,29 @@ for cookie in just_before_like_cookies:
     with open("cookies.json", "a") as file:
         json.dump(cookie, file)
         file.write("\n")
-for n in range(10):
+likes = 10
+not_interested_clicks = 0
+match_found_clicks = 0
+for n in range(60):
+    print(f"{likes=}, {not_interested_clicks=}, {match_found_clicks=}")
+# Add tinder to homescreen popup class: Bgc\(\$c-ds-background-primary\)
     # child = driver.find_element(By.XPATH, '//*[text()="Like"]')
     # parent = child.find_element(By.XPATH, "./..")
-    child = driver.find_element(By.CLASS_NAME, 'Bdc\(\$c-ds-border-gamepad-like-default\)')
-    child.click()
+    like_button = driver.find_element(By.CLASS_NAME, 'Bdc\(\$c-ds-border-gamepad-like-default\)')
+    like_button.click()
     print("Liked!")
     time.sleep(1)
-    another_one = input("Shall I continue?")
-#TODO Click "BACK TO TINDER" to dismiss match?
     not_interested = driver.find_elements(By.XPATH, '//*[text()="Not interested"]')
     match_found = driver.find_elements(By.XPATH, '//*[text()="match"]')
     if len(not_interested) > 0:
+        # this works
         not_interested[0].click()
+        not_interested_clicks += 1
     if len(match_found) > 0:
+        # if anybody loved me, I'd know if this worked too.
         match_found[0].click()
+        match_found_clicks += 1
+    likes += 1
+
 
 # Need to account for matches!
