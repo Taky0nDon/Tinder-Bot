@@ -11,107 +11,69 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 import selenium_stealth
-
-EMAIL = os.environ.get("EMAIL")
-PASS = os.environ.get("PASS")
-
-
-url = "https://tinder.com"
-decline_cookies_xpath = '//*[@id="t223514671"]/main/div[2]/div/div/div[1]/div[2]/button/div[2]/div[2]'
-next_xpath = '//*[@id="identifierNext"]/div/button/span'
-
+from dotenv import load_dotenv
+load_dotenv("env.env")
 
 options = Options()
 options.add_experimental_option("detach", True)
 options.add_argument("--disable-blink-features=AutomationControlled")
 options.add_experimental_option("excludeSwitches", ["enable-automation"])
 options.add_experimental_option("useAutomationExtension", False)
-
-# stay_open.add_argument("--headless=new")
-# stay_open.add_argument("--remote-debugging-port=9222")
 driver = webdriver.Chrome(options)
-driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
-# driver.maximize_window()
+driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")  # Supposedly this helps with stealth
+
 selenium_stealth.stealth(driver,
                          user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
                          languages=["en","en-US"],
                          platform="web",
                          )
+
+EMAIL = os.environ.get("EMAIL")
+PASS = os.environ.get("PASS")
+accept_cookies_xpath = '//*[text()="I accept"]'
+next_xpath = '//*[@id="identifierNext"]/div/button/span'
+
 driver.get("https://tinder.com/404")
 time.sleep(1)
-### ADDING COOKIES
-with open("cookies.json") as file:
-# Check if the file is empty. Only continue if it's not.
-    if len(file.read()) > 0:
-        lines = file.readlines()
-        cookie_list = []
-        for line in lines:
-            print(line)
-            cookie_list.append(json.loads(line))
-        for cookie in cookie_list:
-            driver.add_cookie(cookie)
 
-
-
-print("here")
-driver.get(url)
+driver.get("https://tinder.com")
 print(driver.current_window_handle)
 time.sleep(3)
 
 original_window = driver.current_window_handle
 
-
+# CLICK LOGIN BUTTON
 driver.find_element(By.LINK_TEXT, "Log in").click()
 time.sleep(2)
-driver.find_element(By.XPATH, decline_cookies_xpath).click()
+# DON'T DECLINE COOKIES
+driver.find_element(By.XPATH, accept_cookies_xpath).click()
 driver.find_element(By.TAG_NAME, "iframe").click()
 
 wait = WebDriverWait(driver, 10)
 wait.until(EC.number_of_windows_to_be(2))
-
+# THIS PART SWITCHES FOCUS TO THE GOOGLE AUTH WINDOW
 for window_handle in driver.window_handles:
     if window_handle != original_window:
         driver.switch_to.window(window_handle)
+
 print(driver.current_window_handle)
-# with open("googlecookies.txt") as file:
-#     cookies = file.readlines()
-#     for cookie in cookies:
-#         stripped_cookie = cookie.strip()
-#         cookie_dict = json.loads(stripped_cookie)
-#         driver.add_cookie(cookie_dict)
-# selenium.common.exceptions.UnableToSetCookieException: Message: unable to set cookie
 
 driver.find_element(By.TAG_NAME, "input").send_keys(EMAIL)
 driver.find_element(By.XPATH, next_xpath).click()
 time.sleep(5)
-# wait.until(EC.presence_of_element_located(locator=(By.ID, "password")))
 password_input = driver.find_element(By.XPATH, '//*[@id="password"]/div[1]/div/div[1]/input')
 password_input.send_keys(PASS, Keys.ENTER)
 
-
-current_page = driver.find_element(By.TAG_NAME, "html")
-# with open("2fapage.html", "w") as file:
-#     page_source = driver.page_source
-#     for char in page_source:
-#         if char in "\u200b":
-#             file.write("ZWSP")
-#         elif char == "\u202a":
-#             file.write("LTRE")
-#         else:
-#             file.write(char) f
-print(driver.current_window_handle)
 time.sleep(2)
 keep_going = input("Hit ENTER to continue.")
-
-
 driver.switch_to.window(original_window)
 
-# Allow location
+# ALLOW LOCATION
 driver.find_element(By.CSS_SELECTOR, 'button[aria-label="Allow"]').click()
-#Don't allow notifications
+#DON'T ALLOW NOTIFICATIONS
 driver.find_element(By.CSS_SELECTOR, 'button[aria-label="Not interested"]').click()
 time.sleep(5)
-# Start smashing those hearts
+# START SMASHING THOSE HEARTS
 just_before_like_cookies = driver.get_cookies()
 for cookie in just_before_like_cookies:
     with open("cookies.json", "a") as file:
