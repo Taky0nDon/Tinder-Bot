@@ -32,6 +32,7 @@ EMAIL = os.environ.get("EMAIL")
 PASS = os.environ.get("PASS")
 accept_cookies_xpath = '//*[text()="I accept"]'
 next_xpath = '//*[@id="identifierNext"]/div/button/span'
+maybe_later_xpath = '//*[text()="Maybe Later"]'
 
 driver.get("https://tinder.com/404")
 time.sleep(1)
@@ -65,6 +66,7 @@ password_input = driver.find_element(By.XPATH, '//*[@id="password"]/div[1]/div/d
 password_input.send_keys(PASS, Keys.ENTER)
 
 time.sleep(2)
+
 keep_going = input("Hit ENTER to continue.")
 driver.switch_to.window(original_window)
 
@@ -79,28 +81,36 @@ for cookie in just_before_like_cookies:
     with open("cookies.json", "a") as file:
         json.dump(cookie, file)
         file.write("\n")
-likes = 10
+likes = 0
 not_interested_clicks = 0
 match_found_clicks = 0
 for n in range(60):
+    maybe_later = driver.find_elements(By.XPATH, maybe_later_xpath)
+    not_interested = driver.find_elements(By.XPATH, '//*[text()="Not interested"]')
+    match_found = driver.find_elements(By.XPATH, '//*[text()="match"]')
+    continue_button = driver.find_elements(By.XPATH, '//*[text()="Continue"]')
+    if maybe_later:
+        maybe_later[0].click()
+        print("Clicked ")
+    elif continue_button:
+        continue_button[0].click()
+        print("Clicked continue.")
+        continue
+    elif not_interested:
+        # this works
+        not_interested[0].click()
+        not_interested_clicks += 1
+        continue
+    elif match_found:
+        # if anybody loved me, I'd know if this worked too.
+        match_found[0].click()
+        match_found_clicks += 1
+        continue
     print(f"{likes=}, {not_interested_clicks=}, {match_found_clicks=}")
-# Add tinder to homescreen popup class: Bgc\(\$c-ds-background-primary\)
-    # child = driver.find_element(By.XPATH, '//*[text()="Like"]')
-    # parent = child.find_element(By.XPATH, "./..")
     like_button = driver.find_element(By.CLASS_NAME, 'Bdc\(\$c-ds-border-gamepad-like-default\)')
     like_button.click()
     print("Liked!")
     time.sleep(1)
-    not_interested = driver.find_elements(By.XPATH, '//*[text()="Not interested"]')
-    match_found = driver.find_elements(By.XPATH, '//*[text()="match"]')
-    if len(not_interested) > 0:
-        # this works
-        not_interested[0].click()
-        not_interested_clicks += 1
-    if len(match_found) > 0:
-        # if anybody loved me, I'd know if this worked too.
-        match_found[0].click()
-        match_found_clicks += 1
     likes += 1
 
 
