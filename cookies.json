@@ -1,0 +1,11 @@
+{"domain": "tinder.com", "expiry": 1695421465, "httpOnly": false, "name": "AWSALBCORS", "path": "/", "sameSite": "None", "secure": true, "value": "0zGFLWNcJUMB1I2lLO5IXYjoLS5VsuGv7Zb8NcdVDVoX0+elIEhv/0wVkpbQn4+nSVpgSA6yxTHVHW3q19oKLprLPpwxUEkqbR35YLgUqgAW7GHw18RTTWsug7sf"}
+{"domain": ".tinder.com", "expiry": 1695421461, "httpOnly": false, "name": "AF_SYNC", "path": "/", "sameSite": "Lax", "secure": false, "value": "1694816661081"}
+{"domain": ".tinder.com", "expiry": 1694903060, "httpOnly": false, "name": "_gid", "path": "/", "sameSite": "Lax", "secure": false, "value": "GA1.2.806642820.1694816660"}
+{"domain": "tinder.com", "expiry": 1710368691, "httpOnly": false, "name": "g_state", "path": "/", "sameSite": "Lax", "secure": false, "value": "{\"i_l\":0}"}
+{"domain": ".tinder.com", "expiry": 1729376692, "httpOnly": false, "name": "AF_MEASUREMENT_STATUS", "path": "/", "sameSite": "Lax", "secure": false, "value": "true"}
+{"domain": ".tinder.com", "expiry": 1729376693, "httpOnly": false, "name": "afUserId", "path": "/", "sameSite": "Lax", "secure": false, "value": "be942145-53c9-4450-809e-2e540076ca03-p"}
+{"domain": ".tinder.com", "expiry": 1729376660, "httpOnly": false, "name": "_ga", "path": "/", "sameSite": "Lax", "secure": false, "value": "GA1.2.1462268712.1694816660"}
+{"domain": ".tinder.com", "expiry": 1729376692, "httpOnly": false, "name": "AF_DEFAULT_MEASUREMENT_STATUS", "path": "/", "sameSite": "Lax", "secure": false, "value": "false"}
+{"domain": ".tinder.com", "expiry": 1729376699, "httpOnly": false, "name": "_ga_CDPT3R4PG7", "path": "/", "sameSite": "Lax", "secure": false, "value": "GS1.1.1694816660.1.1.1694816699.0.0.0"}
+{"domain": "tinder.com", "expiry": 1695421465, "httpOnly": false, "name": "AWSALB", "path": "/", "sameSite": "Lax", "secure": false, "value": "0zGFLWNcJUMB1I2lLO5IXYjoLS5VsuGv7Zb8NcdVDVoX0+elIEhv/0wVkpbQn4+nSVpgSA6yxTHVHW3q19oKLprLPpwxUEkqbR35YLgUqgAW7GHw18RTTWsug7sf"}
+{"domain": ".tinder.com", "expiry": 1702592659, "httpOnly": false, "name": "_gcl_au", "path": "/", "sameSite": "Lax", "secure": false, "value": "1.1.699092186.1694816660"}
